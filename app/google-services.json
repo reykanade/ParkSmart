@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "91431697202",
+    "firebase_url": "https://parksmart-414fd.firebaseio.com",
+    "project_id": "parksmart-414fd",
+    "storage_bucket": "parksmart-414fd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:91431697202:android:81985a9f99c47258",
+        "android_client_info": {
+          "package_name": "com.example.vicky.parksmart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "91431697202-c13ksrskb1facs01bp1d84dqhccdk1vk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.vicky.parksmart",
+            "certificate_hash": "9741cbe51b0e6673c7abf002e7082688915817bf"
+          }
+        },
+        {
+          "client_id": "91431697202-s6frru0c2gli5pglhuo2ofppir1k4qpe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPngdWA7ogtLXbaUjjb472St3oiP-MGvg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "91431697202-s6frru0c2gli5pglhuo2ofppir1k4qpe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
