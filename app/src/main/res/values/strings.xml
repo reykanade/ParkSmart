@@ -4,7 +4,7 @@
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
+    <string name="prompt_password">"Password "</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
@@ -23,4 +23,11 @@
     <string name="explore_string">Explore Empty Spaces</string>
     <string name="blank_space">space_image</string>
     <string name="blank_space_1">space_image</string>
+    <string name="name">Name</string>
+    <string name="email_address">Email</string>
+    <string name="password">Password</string>
+    <string name="reenter_password">re-enter Password</string>
+    <string name="mobile_no">Mobile No.</string>
+    <string name="mobileNo">Mobile No.</string>
+    <string name="register">Register</string>
 </resources>
