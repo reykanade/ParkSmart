@@ -3,6 +3,7 @@ package com.example.vicky.parksmart;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -28,7 +29,6 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +40,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,10 +75,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    AutoCompleteTextView username;
-    EditText password;
     private static final String TAG = "debugMessege";
     private FirebaseAuth firebaseAuth;
+    DatabaseHelper databaseHelper;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -89,13 +90,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         setContentView(R.layout.activity_login);
         //if user is already logged in
         firebaseAuth=FirebaseAuth.getInstance();
-        if(firebaseAuth.getCurrentUser()!=null){
+        if(firebaseAuth.getCurrentUser()!=null&&DatabaseHelper.doesDatabaseExist(this)){
             // start main activity
+            Log.v("E_value", "In login activity.... Data: in the database exist code");
+            /*FirebaseUser firebaseUser=firebaseAuth.getCurrentUser();
+            String s=firebaseUser.getEmail();
+            s=s.substring(0,s.lastIndexOf("."));
+            databaseHelper=new DatabaseHelper(this);
+            databaseHelper.updateTbl(s);*/
             finish();   //finish current activity
             startActivity(new Intent(getApplicationContext(),MainActivity.class));
         }
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        databaseHelper=new DatabaseHelper(this);
         populateAutoComplete();
        // username = (AutoCompleteTextView) findViewById(R.id.email);
         //password = (EditText) findViewById(R.id.password);
@@ -124,9 +132,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
          startActivity(intent);
     }
 
+
+
      public void buttonMethod(View view){
-         String email=mEmailView.getText().toString().trim();
-         String passwordString=password.getText().toString().trim();
+         final String email=mEmailView.getText().toString().trim();
+         String passwordString=mPasswordView.getText().toString().trim();
 
          if(TextUtils.isEmpty(email)){
              Toast.makeText(this,"fields are empty", Toast.LENGTH_SHORT).show();
@@ -137,14 +147,29 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
              return;
          }
 
-        firebaseAuth.signInWithEmailAndPassword(email,passwordString)
+         final boolean b=DatabaseHelper.doesDatabaseExist(this);
+         firebaseAuth.signInWithEmailAndPassword(email,passwordString)
             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
                         //start the main activity
+                        String s=email;
+                        s=s.substring(0,s.lastIndexOf("."));
+                        if(b==false) {
+                            databaseHelper.init();
+                            databaseHelper.insertData(s);
+                            Log.v("E_value","Data: in the database does not exist code");
+                        }
+                        else {
+                            databaseHelper.updateTbl(s);
+                            Log.v("E_value","Data: in the database exist code");
+                        }
+                        Cursor cr=databaseHelper.getAllData();
+                        cr.moveToFirst();
+                        Toast.makeText(LoginActivity.this,"table content = "+cr.getString(1),Toast.LENGTH_LONG).show();
                         finish();
-                        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     }
                     else{
                         Toast.makeText(getApplicationContext(),"username or password is incorrect", Toast.LENGTH_SHORT).show();

@@ -1,10 +1,12 @@
 package com.example.vicky.parksmart;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -25,11 +27,17 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText phoneNo;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
+    DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Firebase.setAndroidContext(this);
+
+        if(DatabaseHelper.doesDatabaseExist(this))
+            this.deleteDatabase(DatabaseHelper.getDBName());
+        databaseHelper=new DatabaseHelper(this);
+        //databaseHelper.init();
         setContentView(R.layout.activity_register);
         firebaseAuth=FirebaseAuth.getInstance();
         name=(EditText) findViewById(R.id.editText4);
@@ -75,11 +83,12 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this,"fields are empty", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(passwordString.equals(rpasswordString)==false){
+        if(!passwordString.equals(rpasswordString)){
             Toast.makeText(this,"passwords didnt match", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(passwordString.equals(rpasswordString)==true){
+        final boolean b=DatabaseHelper.doesDatabaseExist(this);
+        if(passwordString.equals(rpasswordString)){
             firebaseAuth.createUserWithEmailAndPassword(emailstring,passwordString).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -88,11 +97,27 @@ public class RegisterActivity extends AppCompatActivity {
                         User user=new User(uName,mobNo,emailstring);
                         String s=emailstring;
                         s=s.substring(0,s.lastIndexOf("."));
-                        Firebase firebase=new Firebase("https://parksmart-414fd.firebaseio.com/Users");
+                        Firebase firebase=new Firebase(getString(R.string.firebase_link)+"/Users");
                         firebase=firebase.child(s);
                         firebase.setValue(user);
                         Toast.makeText(RegisterActivity.this,""+user.getName() +", You have successfully registered.",Toast.LENGTH_LONG).show();
                       //  startMainActivity();
+                        // create table user_table
+                        if(b==false) {
+                            Log.v("E_value", "In register activity.... Data: in the database does not exist code");
+                            databaseHelper.init();
+                            boolean isInserted = databaseHelper.insertData(s);
+                            if (isInserted) {
+                                Cursor cr = databaseHelper.getAllData();
+                                cr.moveToNext();
+                                Toast.makeText(RegisterActivity.this, "table is created and data inserted" + cr.getString(1), Toast.LENGTH_LONG).show();
+                            } else
+                                Toast.makeText(RegisterActivity.this, "data not inserted", Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            databaseHelper.updateTbl(s);
+                            Log.v("E_value", "In register activity.... Data: in the database exist code");
+                        }
                     }
                     else{
                         Toast.makeText(RegisterActivity.this,"Registration not successful. Try again",Toast.LENGTH_SHORT).show();

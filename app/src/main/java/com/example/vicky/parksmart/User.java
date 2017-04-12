@@ -35,6 +35,5 @@ public class User {
     public  String getName() {
         return name;
     }
-    public void setName(String user) { name = user;   }
-
+    public void setName(String usr) { name = usr;   }
 }
