@@ -66,26 +66,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <Button
-        android:id="@+id/button9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="190dp"
-        android:layout_marginLeft="50dp"
-        android:onClick="displayActivityMain2"
-        android:text="Block 5"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
-
-    <Button
-        android:id="@+id/button10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="190dp"
-        android:layout_marginRight="50dp"
-        android:onClick="displayActivityMain2"
-        android:text="Block 6"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
 </android.support.constraint.ConstraintLayout>
