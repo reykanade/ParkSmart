@@ -40,7 +40,9 @@
             android:label="@string/title_activity_main3"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".reserveActivity"></activity>
+        <activity android:name=".reserveActivity" />
+        <activity android:name=".StatusActivity" />
+        <activity android:name=".billingActivity"></activity>
     </application>
 
 </manifest>

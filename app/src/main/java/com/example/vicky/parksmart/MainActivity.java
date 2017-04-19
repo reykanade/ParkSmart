@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(this,ProfileActivity.class));
             // Handle the camera action
         } else if (id == R.id.nav_settings) {
-
+            startActivity(new Intent(this,StatusActivity.class));
         } else if (id == R.id.nav_logout) {
             firebaseAuth.signOut();
             finish();

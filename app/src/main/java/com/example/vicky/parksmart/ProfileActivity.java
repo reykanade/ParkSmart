@@ -1,6 +1,5 @@
 package com.example.vicky.parksmart;
 
-import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,9 +27,7 @@ public class ProfileActivity extends AppCompatActivity {
         contact=(TextView)findViewById(R.id.textView7);
 
         databaseHelper=new DatabaseHelper(this);
-        Cursor cursor=databaseHelper.getAllData();
-        cursor.moveToNext();
-        String userKey=cursor.getString(1);
+        String userKey=databaseHelper.getUserKey();
 
         Firebase.setAndroidContext(this);
 

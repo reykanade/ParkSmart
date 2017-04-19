@@ -38,4 +38,8 @@
     <string name="action_settings">Settings</string>
 
     <string name="firebase_link">https://parksmart-414fd.firebaseio.com</string>
+    <string name="parking_slot_no">Parking Slot No:</string>
+    <string name="date">Date:</string>
+    <string name="time">Time In:</string>
+    <string name="Parking_status">Status:Not parked</string>
 </resources>

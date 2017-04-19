@@ -1,5 +1,6 @@
 package com.example.vicky.parksmart;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
@@ -70,6 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void registerUser(View view){
+        final ProgressDialog loading= ProgressDialog.show(this, "Registering..." ,"Please Wait...",false,false);
         final String emailstring=email.getText().toString().trim();
         final String uName = name.getText().toString().trim();
         final String mobNo = phoneNo.getText().toString().trim();
@@ -93,6 +95,7 @@ public class RegisterActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
+                        loading.dismiss();
                         Toast.makeText(RegisterActivity.this,"Registered successfully",Toast.LENGTH_SHORT).show();
                         User user=new User(uName,mobNo,emailstring);
                         String s=emailstring;
@@ -101,6 +104,8 @@ public class RegisterActivity extends AppCompatActivity {
                         firebase=firebase.child(s);
                         firebase.setValue(user);
                         Toast.makeText(RegisterActivity.this,""+user.getName() +", You have successfully registered.",Toast.LENGTH_LONG).show();
+                        firebase=new Firebase(getString(R.string.firebase_link)+"/UserBookings/"+s+"/hasbooked");
+                        firebase.setValue(false);
                       //  startMainActivity();
                         // create table user_table
                         if(b==false) {
@@ -120,6 +125,7 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
                     else{
+                        loading.dismiss();
                         Toast.makeText(RegisterActivity.this,"Registration not successful. Try again",Toast.LENGTH_SHORT).show();
                     }
                 }

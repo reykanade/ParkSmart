@@ -76,7 +76,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor=db.rawQuery("select * from "+TABLE_NAME,null);
         return cursor;
     }
-
+    public String getUserKey()
+    {
+        Cursor cursor=getAllData();
+        cursor.moveToNext();
+        String userKey=cursor.getString(1);
+        return userKey;
+    }
     public Boolean deleteSQLDatabase(){
 
         return App.context.deleteDatabase(DATABASE_NAME);

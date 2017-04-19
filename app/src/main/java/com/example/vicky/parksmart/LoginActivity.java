@@ -3,6 +3,7 @@ package com.example.vicky.parksmart;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -104,7 +105,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         databaseHelper=new DatabaseHelper(this);
-        populateAutoComplete();
        // username = (AutoCompleteTextView) findViewById(R.id.email);
         //password = (EditText) findViewById(R.id.password);
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -135,6 +135,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
      public void buttonMethod(View view){
+         final ProgressDialog loading= ProgressDialog.show(this, "Signing In" ,"Please Wait...",false,false);
          final String email=mEmailView.getText().toString().trim();
          String passwordString=mPasswordView.getText().toString().trim();
 
@@ -154,6 +155,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
                         //start the main activity
+                        loading.dismiss();
                         String s=email;
                         s=s.substring(0,s.lastIndexOf("."));
                         if(b==false) {
@@ -172,54 +174,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     }
                     else{
+                        loading.dismiss();
                         Toast.makeText(getApplicationContext(),"username or password is incorrect", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
      }
 
-    private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return;
-        }
-
-        getLoaderManager().initLoader(0, null, this);
-    }
-
-    private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
-        return false;
-    }
-
     /**
      * Callback received when a permissions request has been completed.
      */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete();
-            }
-        }
-    }
+
 
 
     /**
